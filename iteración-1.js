@@ -15,22 +15,39 @@ const baseUrl = 'https://api.nationalize.io/?name=';
 const button$$ = document.querySelector("button");
 const input$$ = document.querySelector("input");
 
-function search() {
+// function search() {
 
-  fetch(baseUrl + input$$.value)
-    .then((data) => data.json())
-    .then((data) => console.log(data));
-};
+//   fetch(baseUrl + input$$.value)
+//     .then((data) => data.json())
+//     .then((data) => console.log(data));
+// };
 
-button$$.addEventListener("click", search);
+// button$$.addEventListener("click", search);
 
 // 1.3 En base al ejercicio anterior. Crea dinamicamente un elemento  por cada petición 
 // a la api que diga...'El nombre X tiene un Y porciento de ser de Z' etc etc.
 // EJ: El nombre Pepe tiene un 22 porciento de ser de ET y un 6 porciento de ser 
 // de MZ.
 
-// en vez de poner consolelog en pantalla, quiero que me crees un elemento y me lo pongas debajo
-// y en ese elemento tienes que escribirme es XMLDocument.
+function search() {
+
+    fetch(baseUrl + input$$.value)
+      .then((data) => data.json())
+      .then((namePerson) => {
+
+        const p$$ = document.createElement('p');
+        p$$.textContent = `El nombre ${input$$.value}, `;
+
+        for (const country of namePerson.country) {
+            p$$.textContent += `Tiene un ${Math.floor(country.probability*100)} 
+            porciento de ser de ${country.country_id}. `;   
+        }
+        document.body.appendChild(p$$);
+
+    })
+}
+button$$.addEventListener("click", search);
+
 
 
 
